@@ -26,26 +26,63 @@
 </template>
 
 <script>
-export default {
-  name: "TodoList",
-  data() {
-    return {
-      keyword: '',
-      newList: '',
-      lists: [
-        {
-          text: 'スーパーに行く',
-        },
-        {
-          text: 'クリーニングを出す',
-        },
-        {
-          text: 'ジムへ行く',
-        },
-      ],
-      editTodo: false,
+class State {
+  keyword = ''
+  newList = ''
+  editTodo = false
+  lists = [
+    {
+      text: 'スーパーに行く',
+    },
+    {
+      text: 'クリーニングを出す',
+    },
+    {
+      text: 'ジムへ行く',
+    },
+  ]
+}
+
+
+export default defineComponent({
+  setup(props, context) {
+    const state = reactive(new State())
+
+    const addTodo = () => {
+      if (!this.newList) {
+        alert('文字を入力して下さい')
+        return
+      }
+      state.lists.push({
+        isDone: false,
+        text: state.newList,
+      })
+      state.newList = ''
     }
-  },
+
+    const update
+
+  }
+})
+  // name: "TodoList",
+  // data() {
+  //   return {
+  //     keyword: '',
+  //     newList: '',
+  //     lists: [
+  //       {
+  //         text: 'スーパーに行く',
+  //       },
+  //       {
+  //         text: 'クリーニングを出す',
+  //       },
+  //       {
+  //         text: 'ジムへ行く',
+  //       },
+  //     ],
+  //     editTodo: false,
+  //   }
+  // },
   computed: {
     filteredLists: function () {
       const lists = [];
@@ -60,17 +97,17 @@ export default {
   },
   methods: {
     //追加
-    addTodo() {
-      if (!this.newList) {
-        alert('文字を入力して下さい')
-        return
-      }
-      this.lists.push({
-        isDone: false,
-        text: this.newList,
-      })
-      this.newList = ''
-    },
+    // addTodo() {
+    //   if (!this.newList) {
+    //     alert('文字を入力して下さい')
+    //     return
+    //   }
+    //   this.lists.push({
+    //     isDone: false,
+    //     text: this.newList,
+    //   })
+    //   this.newList = ''
+    // },
     //編集
     updateTodo(index) {
       this.lists[index].isActive = true
