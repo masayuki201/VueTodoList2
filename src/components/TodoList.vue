@@ -9,7 +9,7 @@
   <div class="contents">
     <p v-if="lists.length === 0" class="warningMessage">Todoがありません！</p>
     <ul class="contents_ul" v-else>
-      <li class="contents_li" v-for="(list, index) in filteredLists" :key="index">
+      <li class="contents_li" v-for="(list, index) in lists" :key="index">
         <input type="checkbox" v-model="list.isDone"/>
         <span :class="{'list-done':list.isDone }">{{ list.text }}</span>
         <div v-if="list.isActive">
@@ -26,26 +26,28 @@
 </template>
 
 <script>
+import { defineComponent, reactive, toRefs } from "vue";
+
 class State {
   keyword = ''
   newList = ''
   editTodo = false
   lists = [
+      {
+        text: 'スーパーへ行く'
+      },
     {
-      text: 'スーパーに行く',
+      text: 'クリーニングを出す'
     },
     {
-      text: 'クリーニングを出す',
-    },
-    {
-      text: 'ジムへ行く',
-    },
+      text: 'ジムへ行く'
+    }
   ]
 }
 
 
 export default defineComponent({
-  setup(props, context) {
+  setup() {
     const state = reactive(new State())
 
     const addTodo = () => {
@@ -60,8 +62,38 @@ export default defineComponent({
       state.newList = ''
     }
 
-    const update
+    const updateTodo = (index) => {
+      state.lists[index].isActive = true
+      state.lists[index].text = state.list[index].text
+    }
 
+    const updateDone = (index) => {
+      state.lists[index].isActive = false
+    }
+
+    const deleteTodo = () => {
+      state.lists = state.lists.filter((list) => !list.isDone)
+    }
+
+    // const filteredLists = computed(() =>
+    // const lists = [];
+    // for (const i in this.lists) {
+    //   const list = this.lists[i];
+    //   if (list.text.indexOf(this.keyword) !== -1) {
+    //     lists.push(list);
+    //   }
+    // }
+    // return lists;
+    // )
+
+    return {
+      ...toRefs(state),
+      addTodo,
+      updateTodo,
+      updateDone,
+      deleteTodo,
+      // filteredLists,
+    }
   }
 })
   // name: "TodoList",
@@ -83,19 +115,19 @@ export default defineComponent({
   //     editTodo: false,
   //   }
   // },
-  computed: {
-    filteredLists: function () {
-      const lists = [];
-      for (const i in this.lists) {
-        const list = this.lists[i];
-        if (list.text.indexOf(this.keyword) !== -1) {
-          lists.push(list);
-        }
-      }
-      return lists;
-    }
-  },
-  methods: {
+  // computed: {
+  //   filteredLists: function () {
+  //     const lists = [];
+  //     for (const i in this.lists) {
+  //       const list = this.lists[i];
+  //       if (list.text.indexOf(this.keyword) !== -1) {
+  //         lists.push(list);
+  //       }
+  //     }
+  //     return lists;
+  //   }
+  // },
+  // methods: {
     //追加
     // addTodo() {
     //   if (!this.newList) {
@@ -109,23 +141,23 @@ export default defineComponent({
     //   this.newList = ''
     // },
     //編集
-    updateTodo(index) {
-      this.lists[index].isActive = true
-      this.lists[index].text = this.list[index].text
-    },
-    //完了
-    updateDone(index) {
-      this.lists[index].isActive = false
-    },
-    //削除
-    deleteTodo() {
-      this.lists = this.lists.filter((list) => !list.isDone)
-    },
-  },
-  props: {
-    title: String,
-  },
-}
+    // updateTodo(index) {
+    //   this.lists[index].isActive = true
+    //   this.lists[index].text = this.list[index].text
+    // },
+    // //完了
+    // updateDone(index) {
+    //   this.lists[index].isActive = false
+    // },
+    // //削除
+    // deleteTodo() {
+    //   this.lists = this.lists.filter((list) => !list.isDone)
+    // },
+  // },
+  // props: {
+  //   title: String,
+  // },
+// }
 </script>
 
 <style scoped>
