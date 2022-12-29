@@ -31,7 +31,6 @@ import { defineComponent, reactive, toRefs, computed } from "vue";
 class State {
   keyword = ''
   newList = ''
-  editTodo = false
   lists = [
       {
         text: 'スーパーへ行く'
@@ -45,8 +44,10 @@ class State {
   ]
 }
 
-
 export default defineComponent({
+  props: {
+    title: {type: String}
+  },
   setup() {
     const state = reactive(new State())
 
@@ -81,17 +82,6 @@ export default defineComponent({
       return state.lists.filter((list) => list.text.includes(searchKeyword));
     });
 
-    // const filteredLists = computed(() =>
-    // const lists = [];
-    // for (const i in this.lists) {
-    //   const list = this.lists[i];
-    //   if (list.text.indexOf(this.keyword) !== -1) {
-    //     lists.push(list);
-    //   }
-    // }
-    // return lists;
-    // )
-
     return {
       ...toRefs(state),
       addTodo,
@@ -100,70 +90,10 @@ export default defineComponent({
       deleteTodo,
       filteredLists,
     }
+
+
   }
 })
-  // name: "TodoList",
-  // data() {
-  //   return {
-  //     keyword: '',
-  //     newList: '',
-  //     lists: [
-  //       {
-  //         text: 'スーパーに行く',
-  //       },
-  //       {
-  //         text: 'クリーニングを出す',
-  //       },
-  //       {
-  //         text: 'ジムへ行く',
-  //       },
-  //     ],
-  //     editTodo: false,
-  //   }
-  // },
-  // computed: {
-  //   filteredLists: function () {
-  //     const lists = [];
-  //     for (const i in this.lists) {
-  //       const list = this.lists[i];
-  //       if (list.text.indexOf(this.keyword) !== -1) {
-  //         lists.push(list);
-  //       }
-  //     }
-  //     return lists;
-  //   }
-  // },
-  // methods: {
-    //追加
-    // addTodo() {
-    //   if (!this.newList) {
-    //     alert('文字を入力して下さい')
-    //     return
-    //   }
-    //   this.lists.push({
-    //     isDone: false,
-    //     text: this.newList,
-    //   })
-    //   this.newList = ''
-    // },
-    //編集
-    // updateTodo(index) {
-    //   this.lists[index].isActive = true
-    //   this.lists[index].text = this.list[index].text
-    // },
-    // //完了
-    // updateDone(index) {
-    //   this.lists[index].isActive = false
-    // },
-    // //削除
-    // deleteTodo() {
-    //   this.lists = this.lists.filter((list) => !list.isDone)
-    // },
-  // },
-  // props: {
-  //   title: String,
-  // },
-// }
 </script>
 
 <style scoped>
