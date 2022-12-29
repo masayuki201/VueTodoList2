@@ -9,16 +9,16 @@
   <div class="contents">
     <p v-if="lists.length === 0" class="warningMessage">Todoがありません！</p>
     <ul class="contents_ul" v-else>
-      <li class="contents_li" v-for="(list, index) in lists" :key="index">
+      <li class="contents_li" v-for="(list, index) in filteredLists" :key="index">
         <input type="checkbox" v-model="list.isDone"/>
         <span :class="{'list-done':list.isDone }">{{ list.text }}</span>
         <div v-if="list.isActive">
         <span>
           <input type="text" v-model="list.text">
         </span>
-          <button class="doneBtn" @click="updateDone(index)">完了</button>
+          <button class="updateBtn" @click="updateTodo(index)">完了</button>
         </div>
-        <button class="editBtn" v-show="!list.isActive" @click="updateTodo(index)">編集</button>
+        <button class="editBtn" v-show="!list.isActive" @click="editTodo(index)">編集</button>
       </li>
     </ul>
   </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { defineComponent, reactive, toRefs } from "vue";
+import { defineComponent, reactive, toRefs, computed } from "vue";
 
 class State {
   keyword = ''
@@ -51,7 +51,7 @@ export default defineComponent({
     const state = reactive(new State())
 
     const addTodo = () => {
-      if (!this.newList) {
+      if (!state.newList) {
         alert('文字を入力して下さい')
         return
       }
@@ -62,18 +62,24 @@ export default defineComponent({
       state.newList = ''
     }
 
-    const updateTodo = (index) => {
+    const editTodo = (index) => {
       state.lists[index].isActive = true
       state.lists[index].text = state.list[index].text
     }
 
-    const updateDone = (index) => {
+    const updateTodo = (index) => {
       state.lists[index].isActive = false
     }
 
     const deleteTodo = () => {
       state.lists = state.lists.filter((list) => !list.isDone)
     }
+
+    const filteredLists = computed(() => {
+      const searchKeyword = state.keyword;
+      if (searchKeyword === '') return state.lists;
+      return state.lists.filter((list) => list.text.includes(searchKeyword));
+    });
 
     // const filteredLists = computed(() =>
     // const lists = [];
@@ -89,10 +95,10 @@ export default defineComponent({
     return {
       ...toRefs(state),
       addTodo,
+      editTodo,
       updateTodo,
-      updateDone,
       deleteTodo,
-      // filteredLists,
+      filteredLists,
     }
   }
 })
@@ -200,7 +206,7 @@ export default defineComponent({
   margin: 5px;
 }
 
-.doneBtn {
+.updateBtn {
   background-color: deepskyblue;
   margin: 5px;
 }
