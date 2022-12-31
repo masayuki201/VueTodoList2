@@ -32,9 +32,9 @@ class State {
   keyword = ''
   newList = ''
   lists = [
-      {
+    {
         text: 'スーパーへ行く'
-      },
+    },
     {
       text: 'クリーニングを出す'
     },
@@ -51,6 +51,7 @@ export default defineComponent({
   setup() {
     const state = reactive(new State())
 
+    // 追加
     const addTodo = () => {
       if (!state.newList) {
         alert('文字を入力して下さい')
@@ -63,15 +64,18 @@ export default defineComponent({
       state.newList = ''
     }
 
+    // 編集
     const editTodo = (index) => {
       state.lists[index].isActive = true
       state.lists[index].text = state.list[index].text
     }
 
+    // 完了
     const updateTodo = (index) => {
       state.lists[index].isActive = false
     }
 
+    // 削除
     const deleteTodo = () => {
       state.lists = state.lists.filter((list) => !list.isDone)
     }
