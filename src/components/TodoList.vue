@@ -94,8 +94,6 @@ export default defineComponent({
       deleteTodo,
       filteredLists,
     }
-
-
   }
 })
 </script>
